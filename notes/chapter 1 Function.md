@@ -53,3 +53,60 @@ three types of names: built-in function, assignment, and def statement
 >
 > 1. Evaluate all expressions to the right of = form left to right
 > 2. Bind all names to the left of = to the resulting values in the current frame
+
+## Read 1.3
+
+```pyto
+def square(x):
+	# x is called formal parameter
+	return mul(x, x)
+```
+
+### Choosing Names:
+
+1. Function names are lowercase, with words separated by underscores. Descriptive names are encouraged.
+2. Function names typically evoke operations applied to arguments by the interpreter (e.g., `print`, `add`, `square`) or the name of the quantity that results (e.g., `max`, `abs`, `sum`).
+3. Parameter names are lowercase, with words separated by underscores. Single-word names are preferred.
+4. Parameter names should evoke the role of the parameter in the function, not just the kind of argument that is allowed.
+5. Single letter parameter names are acceptable when their role is obvious, but avoid "l" (lowercase ell), "O" (capital oh), or "I" (capital i) to avoid confusion with numerals.
+
+## Control
+
+```pyt
+""" if statement """
+if x < 0:  # Clause
+	return -x  # Clause
+else:
+	return x # Suite
+```
+
+### Boolean Contexts
+
+False values in Python: `False`, `0`, `''`, `None`
+
+### lab01
+
+"""
+
+\>\>\> 1 and 3
+
+3
+
+"""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

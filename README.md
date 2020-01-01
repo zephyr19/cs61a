@@ -4,7 +4,7 @@
 
 Fall 2019  Instructor: John DeNero
 
-#### A course about managing complexity
+### A course about managing complexity
 
 - Mastering abstraction
 - Programming paradigms(程序范例)
