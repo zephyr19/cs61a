@@ -126,6 +126,7 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     """
     player = 0  # Which player is about to take a turn, 0 (first) or 1 (second)
     # BEGIN PROBLEM 5
+    say_local = say
     if not feral_hogs:
         while True:
             if player == 0:
@@ -134,6 +135,7 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
                 score1 += take_turn(strategy1(score1, score0), score0, dice)
             if is_swap(score0, score1):
                 score0, score1 = score1, score0
+            say_local = say_local(score0, score1)
             if score0 >= goal or score1 >= goal:
                 break
             player = other(player)
@@ -158,6 +160,7 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
                 previous1 = dice_num
             if is_swap(score0, score1):
                 score0, score1 = score1, score0
+            say_local = say_local(score0, score1)
             if score0 >= goal or score1 >= goal:
                 break
             player = other(player)
@@ -246,7 +249,21 @@ def announce_highest(who, previous_high=0, previous_score=0):
     """
     assert who == 0 or who == 1, 'The who argument should indicate a player.'
     # BEGIN PROBLEM 7
-    "*** YOUR CODE HERE ***"
+
+    def print_highest(score0, score1):
+        if who == 0:
+            current_high = score0 - previous_score
+            if current_high > previous_high:
+                print(str(current_high) + " point(s)! That's the biggest gain yet for Player 0")
+                return announce_highest(who, current_high, score0)
+            return announce_highest(who, previous_high, score0)
+        else:
+            current_high = score1 - previous_score
+            if current_high > previous_high:
+                print(str(current_high) + " point(s)! That's the biggest gain yet for Player 1")
+                return announce_highest(who, current_high, score1)
+            return announce_highest(who, previous_high, score1)
+    return print_highest
     # END PROBLEM 7
 
 
