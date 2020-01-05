@@ -94,6 +94,10 @@ False values in Python: `False`, `0`, `''`, `None`
 
 """
 
+### Higher Order Function
+
+takes a function as an argument, and returns another function 
+
 
 
 
