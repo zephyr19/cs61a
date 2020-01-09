@@ -155,12 +155,7 @@ def church_to_int(n):
     return n(increment)(0)
 
 def update_church(base, n, update):
-    """Return the Church numeral for the update of the m, n
-
-    base -- the base value of the opration
-    n -- the update function will excutive n times
-    update -- update base value
-    """
+    """Update base n times"""
     numeral_n, res = church_to_int(n), base
     for x in range(numeral_n):
         res = update(res)
@@ -194,3 +189,5 @@ def pow_church(m, n):
     9
     """
     return update_church(one, n, lambda x: mul_church(m, x))
+
+# Clearly, my implementation is suck compared to the solution.
