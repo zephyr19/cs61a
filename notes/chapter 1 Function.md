@@ -197,7 +197,73 @@ def triple(x):
 triple = trace(triple)
 ```
 
+## Recursive Function
 
+**Definition**: A function is called *recursive* if the body of the function calls the function itself, either directly or indirectly.
+
+**Remember:** always check for base case(which is usually the simplest input possible to the function or the stopping condition)
+
+**Verifying correctness:** assume `recursive_func(n-1)`  is correct, and make sure it won't running forever
+
+**Tree Recursion:** call itself more than once. **Example below:**
+
+```python
+def count_partions(n, m):
+    """Count the ways to partition n using parts up to m."""
+    if n == 0:
+        return 1
+    elif n < 0:
+        return 0
+    elif m == 0:
+        return 0
+    else:
+        with_m = count_partions(n-m, m)
+        without_m = count_partions(n, m-1)
+        return with_m + without_m
+```
+
+\*\* **Question in disc03:** \*\*
+
+```python
+def merge(n1, n2):
+    """ Merges two numbers
+    >>> merge(31, 42)
+    4321
+    >>> merge(21, 0)
+    21
+    >>> merge (21, 31)
+    3211
+    """
+    # Your implementation is really suck
+    # Not get the hang of designing recursive functions
+    if n2 == 0:
+        return n1
+    n1 = insert(n1, n2 % 10)
+    return merge(n1, n2 // 10)
+def insert(number, digit):
+    pre, k, behind, last = number, 0, 0, 0
+    while pre > 0:
+        pre, last = pre // 10, pre % 10
+        if digit < last:
+            return ((pre * 10 + last) * 10 + digit) * pow(10, k) + behind
+		behind, k = behind + last * pow(10, k), k+1
+	return number + digit * pow(10, k+1)
+```
+
+```python
+# Solution
+def merge(n1, n2):
+    if n1 == 0:
+        return n2
+    elif n2 == 0:
+        return n1
+    elif n1 % 10 < n2 % 10:
+        return merge(n1 // 10, n2) * 10 + n1 % 10
+    else:
+        return merge(n1, n2 // 10) * 10 + n2 % 10
+```
+
+**Remain unsolved question:** [Anonymous factorial](https://cs61a.org/hw/hw03/#q3) and [Ping-pong](https://cs61a.org/hw/hw03/#q3) implementation is not perfect.
 
 
 
