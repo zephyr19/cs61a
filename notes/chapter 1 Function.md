@@ -201,9 +201,17 @@ triple = trace(triple)
 
 **Definition**: A function is called *recursive* if the body of the function calls the function itself, either directly or indirectly.
 
+**How to implement:** 
+
+- Find the **base case:** such as the simplest input or the stop case
+- Figure out how to call recursive function in a simpler case
+
 **Remember:** always check for base case(which is usually the simplest input possible to the function or the stopping condition)
 
-**Verifying correctness:** assume `recursive_func(n-1)`  is correct, and make sure it won't running forever
+**Verifying correctness:** 
+
+- assume `recursive_func(n-1)`  is correct
+- make sure it won't running forever
 
 **Tree Recursion:** call itself more than once. **Example below:**
 

@@ -18,12 +18,17 @@
 A sequence is an ordered collection of values, which has a length and supports element selection
 
 - **Lists:** the `add` and `mul` operator
-  - `[[]] * 4 ` will create a nested empty list, **but** all the inside list will point to the same memory area
-  - So, you should using `[[] for _ in range(4)]`
+  
+  - List's index can be negative number: `lst[-1]` will return the last element of the list
+  - `[[]] * 4 ` will create a nested empty list, **but** all the inside list will point to the same memory area. So, you should using `[[] for _ in range(4)]`
+  
 - **List Comprehensions**: [<map expression> for <name> in <sequence expression> if <filter expression>]
+
 - **Aggregation:** `sum`, `min`, `max`
+
 - built-in functions: `map`, `filter`, `reduce`
-- `range`
+
+- `range`: `list()` function can turn `range` into `list`
 
 - `for` statement:
 
@@ -44,6 +49,7 @@ A sequence is an ordered collection of values, which has a length and supports e
 - **String:**
   - A single character is a string, Python do not have `char` data type.
   - also have `add` and `mul` operator
+  
 - **Trees:**
   - *closure property* permits us to create hierarchical structures, like lists
   - 
