@@ -22,7 +22,7 @@ def taxicab(a, b):
     >>> taxicab(ess_a_bagel, times_square)
     9
     """
-    "*** YOUR CODE HERE ***"
+    return 1
 
 # Mobiles
 
