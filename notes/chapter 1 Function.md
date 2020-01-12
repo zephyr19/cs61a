@@ -271,6 +271,47 @@ def merge(n1, n2):
         return merge(n1, n2 // 10) * 10 + n2 % 10
 ```
 
+\*\* **Question in guer01:** \*\*
+
+```python
+def mario_number(level):
+    """Return the number of ways that Mario can perform a sequence of steps
+    or jumps to reach the end of the level without ever landing in a Piranha
+    plant. Assume that every level begins and ends with a dash.
+    >>> mario_number('-P-P-') # jump, jump
+    1
+    >>> mario_number('-P-P--') # jump, jump, step
+    1
+    >>> mario_number('--P-P-') # step, jump, jump
+    1
+    >>> mario_number('---P-P-') # step, step, jump, jump or jump, jump, jump
+    2
+    >>> mario_number('-P-PP-') # Mario cannot jump two plants
+    0
+    >>> mario_number('----') # step, jump ; jump, step ; step, step, step
+    3
+    >>> mario_number('----P----')
+    9
+    >>> mario_number('---P----P-P---P--P-P----P-----P-')
+    180
+    """
+```
+
+```python
+# solution
+# **Generalization!!**
+# transform the question!
+    def ways(n):
+        if n == len(level) - 1:
+            return 1
+        if n >= len(level) or level[n] == 'P':
+            return 0
+    return ways(n+1) + ways(n+2)
+return ways(0)
+```
+
+
+
 **Remain unsolved question:** [Anonymous factorial](https://cs61a.org/hw/hw03/#q3) and [Ping-pong](https://cs61a.org/hw/hw03/#q3) implementation is not perfect.
 
 
