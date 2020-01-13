@@ -22,7 +22,7 @@ def taxicab(a, b):
     >>> taxicab(ess_a_bagel, times_square)
     9
     """
-    return 1
+    return abs(avenue(a) - avenue(b)) + abs(street(a) - street(b))
 
 # Mobiles
 
@@ -68,12 +68,12 @@ def end(s):
 def weight(size):
     """Construct a weight of some size."""
     assert size > 0
-    "*** YOUR CODE HERE ***"
+    return ['weight', size]
 
 def size(w):
     """Select the size of a weight."""
     assert is_weight(w), 'must call size on a weight'
-    "*** YOUR CODE HERE ***"
+    return w[1]
 
 def is_weight(w):
     """Whether w is a weight."""
@@ -121,7 +121,11 @@ def balanced(m):
     >>> balanced(mobile(side(1, w), side(1, v)))
     False
     """
-    "*** YOUR CODE HERE ***"
+    if is_weight(m):
+        return True
+    left_torque = length(left(m)) * total_weight(end(left(m)))
+    right_torque = length(right(m)) * total_weight(end(right(m)))
+    return left_torque == right_torque and balanced(end(left(m))) and balanced(end(right(m)))
 
 def totals_tree(m):
     """Return a tree representing the mobile with its total weight at the root.
@@ -148,7 +152,10 @@ def totals_tree(m):
           3
           2
     """
-    "*** YOUR CODE HERE ***"
+    if is_weight(m):
+        return tree(size(m))
+    else:
+        return tree(total_weight(m), [totals_tree(end(left(m))), totals_tree(end(right(m)))])
 
 def replace_leaf(t, old, new):
     """Returns a new tree where every leaf value equal to old has
@@ -179,7 +186,13 @@ def replace_leaf(t, old, new):
     >>> laerad == yggdrasil # Make sure original tree is unmodified
     True
     """
-    "*** YOUR CODE HERE ***"
+    if is_leaf(t):
+        return tree(new) if label(t) == old else tree(label(t))
+    else:
+        t_branches = []
+        for b in branches(t):
+            t_branches.append(replace_leaf(b, old, new))
+        return tree(label(t), t_branches)
 
 def make_fib():
     """Returns a function that returns the next Fibonacci number
