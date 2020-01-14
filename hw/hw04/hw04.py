@@ -189,10 +189,7 @@ def replace_leaf(t, old, new):
     if is_leaf(t):
         return tree(new) if label(t) == old else tree(label(t))
     else:
-        t_branches = []
-        for b in branches(t):
-            t_branches.append(replace_leaf(b, old, new))
-        return tree(label(t), t_branches)
+        return tree(label(t), [replace_leaf(b, old, new) for b in branches(t)])
 
 def make_fib():
     """Returns a function that returns the next Fibonacci number
