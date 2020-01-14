@@ -67,7 +67,7 @@ A sequence is an ordered collection of values, which has a length and supports e
 - **Tuples:** **immutable**, when a tuple contains a list, the value in the list can change
 - **Dictionaries:** `keys()`, `values()`, `items()`, `get(key, default_value)`, supports comprehension syntax.
 
-- **nonlocal:** a general feature of programming languages with higher-order function and lexical scope
+- **nonlocal:** a general feature of programming languages with higher-order function and lexical scope, nonlocal can also rebind a new function to an existing name.
 
 ![nonlocal](nonlocal.png)
 
@@ -76,6 +76,7 @@ A sequence is an ordered collection of values, which has a length and supports e
   - If a dictionary changes it's length, the old iterator will be invalid.
   - **Lazy:** `map()`, `filter()`, `zip()`, `reversed()`
 - **Generators:** `yield`, `yield from`
+- **declarative programming:** [2.4.13 Propagating Constraints](http://composingprograms.com/pages/24-mutable-data.html#dictionaries)
 
 
 
