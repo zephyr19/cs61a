@@ -51,22 +51,47 @@ A sequence is an ordered collection of values, which has a length and supports e
   - also have `add` and `mul` operator
   
 - **Trees:**
+  
   - *closure property* permits us to create hierarchical structures, like lists
+  - depth: how far a node is from the root. The root's depth is 0.
+  - height: The depth of the lowest leaf. So if a root tree's depth is 0.
 
 
 
 ## Read 2.4 Mutable Data
 
-- **Object-oriented programming**
 - **Identity:** `is`, `is not` is a stronger condition than equality `==` (opposite to java)
   - `list_a = list_b` is a shallow copy
   - `list_a = list(list_b)` or (`list_a = list_b[:]`) is a deep copy, **however**, they will crash if source_list contains **nested lists**
+- **list manipulation:** `[:]`, `list()`, `append()`, `extend()`, `+=`, `pop()`(couldn't pop a empty list, if given a index, will pop the index one), `remove(value)`(will remove the value, if not exist, will cause error), `insert(index, value)`, `count(value)`(count how many times the value appears in the list), `index(value)`(return the index of the value)
+- **Tuples:** **immutable**, when a tuple contains a list, the value in the list can change
+- **Dictionaries:** `keys()`, `values()`, `items()`, `get(key, default_value)`, supports comprehension syntax.
+
+- **nonlocal:** a general feature of programming languages with higher-order function and lexical scope
+
+![nonlocal](nonlocal.png)
+
+- **Iterators:** 
+  - `iter()` and `next() `(when there is nothing in the iterator, call next() will raise a `StopIteration` exception)
+  - If a dictionary changes it's length, the old iterator will be invalid.
+  - **Lazy:** `map()`, `filter()`, `zip()`, `reversed()`
+- **Generators:** `yield`, `yield from`
 
 
 
-**nonlocal:**
 
-![image-20200113164001974](../../../../AppData/Roaming/Typora/typora-user-images/image-20200113164001974.png)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
