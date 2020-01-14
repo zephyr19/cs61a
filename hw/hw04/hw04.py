@@ -217,7 +217,13 @@ def make_fib():
     >>> check(this_file, 'make_fib', ['List'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    pre, curr = 1, 0
+
+    def fib():
+        nonlocal pre, curr
+        pre, curr = curr, pre + curr
+        return pre
+    return fib
 
 def make_withdraw(balance, password):
     """Return a password-protected withdraw function.
@@ -247,7 +253,21 @@ def make_withdraw(balance, password):
     >>> type(w(10, 'l33t')) == str
     True
     """
-    "*** YOUR CODE HERE ***"
+    wrong_password = []
+
+    def withdraw(amount, input_password):
+        nonlocal balance
+        if len(wrong_password) == 3:
+            return "Your account is locked. Attempts: " + str(wrong_password)
+        elif input_password != password:
+            wrong_password.append(input_password)
+            return 'Incorrect password'
+        elif amount >= balance:
+            return 'Insufficient funds'
+        else:
+            balance -= amount
+            return balance
+    return withdraw
 
 def make_joint(withdraw, old_password, new_password):
     """Return a password-protected withdraw function that has joint access to
@@ -287,9 +307,16 @@ def make_joint(withdraw, old_password, new_password):
     >>> make_joint(w, 'hax0r', 'hello')
     "Your account is locked. Attempts: ['my', 'secret', 'password']"
     """
-    "*** YOUR CODE HERE ***"
+    is_str = withdraw(0, old_password)
+    if type(is_str) == str:
+        return is_str
 
-
+    def joint(amount, input_password):
+        if input_password == new_password:
+            return withdraw(amount, old_password)
+        else:
+            return withdraw(amount, input_password)
+    return joint
 
 ## Tree Methods ##
 
@@ -366,11 +393,11 @@ def interval(a, b):
 
 def lower_bound(x):
     """Return the lower bound of interval x."""
-    "*** YOUR CODE HERE ***"
+    return x[0]
 
 def upper_bound(x):
     """Return the upper bound of interval x."""
-    "*** YOUR CODE HERE ***"
+    return x[1]
 
 def str_interval(x):
     """Return a string representation of interval x.
@@ -387,22 +414,23 @@ def add_interval(x, y):
 def mul_interval(x, y):
     """Return the interval that contains the product of any value in x and any
     value in y."""
-    p1 = x[0] * y[0]
-    p2 = x[0] * y[1]
-    p3 = x[1] * y[0]
-    p4 = x[1] * y[1]
-    return [min(p1, p2, p3, p4), max(p1, p2, p3, p4)]
+    p1 = lower_bound(x) * lower_bound(y)
+    p2 = lower_bound(x) * upper_bound(y)
+    p3 = upper_bound(x) * lower_bound(y)
+    p4 = upper_bound(x) * upper_bound(y)
+    return interval(min(p1, p2, p3, p4), max(p1, p2, p3, p4))
 
 def sub_interval(x, y):
     """Return the interval that contains the difference between any value in x
     and any value in y."""
-    "*** YOUR CODE HERE ***"
+    new_y = interval(-upper_bound(y), -lower_bound(y))
+    return add_interval(x, new_y)
 
 def div_interval(x, y):
     """Return the interval that contains the quotient of any value in x divided by
     any value in y. Division is implemented as the multiplication of x by the
     reciprocal of y."""
-    "*** YOUR CODE HERE ***"
+    assert upper_bound(y) < 0 or lower_bound(y) > 0, 'can not span 0'
     reciprocal_y = interval(1/upper_bound(y), 1/lower_bound(y))
     return mul_interval(x, reciprocal_y)
 
@@ -416,7 +444,8 @@ def par2(r1, r2):
     return div_interval(one, add_interval(rep_r1, rep_r2))
 
 def multiple_references_explanation():
-    return """The multiple reference problem..."""
+    return """par2 checks for r1, r2 are both not span 0,
+        while par1 doesn't"""
 
 def quadratic(x, a, b, c):
     """Return the interval that is the range of the quadratic defined by
@@ -427,4 +456,9 @@ def quadratic(x, a, b, c):
     >>> str_interval(quadratic(interval(1, 3), 2, -3, 1))
     '0 to 10'
     """
-    "*** YOUR CODE HERE ***"
+    domain = [lower_bound(x), upper_bound(x)]
+    extreme_point = -b/(2*a)
+    if extreme_point > domain[0] and extreme_point < domain[1]:
+        domain.append(extreme_point)
+    range = [a*t*t + b*t + c for t in domain]
+    return interval(min(range), max(range))

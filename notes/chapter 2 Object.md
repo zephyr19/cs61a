@@ -44,7 +44,7 @@ A sequence is an ordered collection of values, which has a length and supports e
 - **Sequence Abstraction:**
 
   - Membership: `in`,  `not in`
-  - Slicing: will create a new list and return it.
+  - Slicing( `[:]` ): will create a new list and return it.
 
 - **String:**
   - A single character is a string, Python do not have `char` data type.
@@ -52,11 +52,21 @@ A sequence is an ordered collection of values, which has a length and supports e
   
 - **Trees:**
   - *closure property* permits us to create hierarchical structures, like lists
-  - 
 
 
 
+## Read 2.4 Mutable Data
 
+- **Object-oriented programming**
+- **Identity:** `is`, `is not` is a stronger condition than equality `==` (opposite to java)
+  - `list_a = list_b` is a shallow copy
+  - `list_a = list(list_b)` or (`list_a = list_b[:]`) is a deep copy, **however**, they will crash if source_list contains **nested lists**
+
+
+
+**nonlocal:**
+
+![image-20200113164001974](../../../../AppData/Roaming/Typora/typora-user-images/image-20200113164001974.png)
 
 
 
