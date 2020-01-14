@@ -68,6 +68,7 @@ A sequence is an ordered collection of values, which has a length and supports e
 - **Dictionaries:** `keys()`, `values()`, `items()`, `get(key, default_value)`, supports comprehension syntax.
 
 - **nonlocal:** a general feature of programming languages with higher-order function and lexical scope, nonlocal can also rebind a new function to an existing name.
+  - When manipulating function using nonlocal, be aware of 'return tuple'  [disc06  1.2](https://cs61a.org/disc/disc06.pdf)
 
 ![nonlocal](nonlocal.png)
 
