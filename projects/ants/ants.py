@@ -40,6 +40,11 @@ class Place(object):
         if insect.is_ant:
             if self.ant is None:
                 self.ant = insect
+            elif self.ant.can_contain(insect):
+                self.ant.contain_ant(insect)
+            elif insect.can_contain(self.ant):
+                insect.contain_ant(self.ant)
+                self.ant = insect
             else:
                 # BEGIN Problem 9
                 assert self.ant is None, 'Two ants in {0}'.format(self)
@@ -61,7 +66,9 @@ class Place(object):
         if insect.is_ant:
             # Special handling for QueenAnt
             # BEGIN Problem 13
-            "*** YOUR CODE HERE ***"
+            if isinstance(insect, QueenAnt):
+                if insect.is_impostor is False:
+                    return
             # END Problem 13
 
             # Special handling for container ants
@@ -92,6 +99,7 @@ class Insect(object):
 
     is_ant = False
     damage = 0
+    is_watersafe = False
     # ADD CLASS ATTRIBUTES HERE
 
     def __init__(self, armor, place=None):
@@ -133,6 +141,7 @@ class Bee(Insect):
 
     name = 'Bee'
     damage = 1
+    is_watersafe = True
     # OVERRIDE CLASS ATTRIBUTES HERE
 
 
@@ -176,11 +185,13 @@ class Ant(Insect):
     implemented = False  # Only implemented Ant classes should be instantiated
     food_cost = 0
     blocks_path = True
+    is_container = False
     # ADD CLASS ATTRIBUTES HERE
 
     def __init__(self, armor=1):
         """Create an Ant with an ARMOR quantity."""
         Insect.__init__(self, armor)
+        self.doubled = False
 
     def can_contain(self, other):
         return False
@@ -364,15 +375,25 @@ class NinjaAnt(Ant):
 
 # BEGIN Problem 8
 # The WallAnt class
+class WallAnt(Ant):
+    name = 'Wall'
+    food_cost = 4
+    implemented = True
+
+    def __init__(self, armor=4):
+        """Create an Ant with an ARMOR quantity."""
+        Ant.__init__(self, armor)
 # END Problem 8
 
 class BodyguardAnt(Ant):
     """BodyguardAnt provides protection to other Ants."""
 
     name = 'Bodyguard'
+    food_cost = 4
+    is_container = True
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 9
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem 9
 
     def __init__(self, armor=2):
@@ -381,17 +402,20 @@ class BodyguardAnt(Ant):
 
     def can_contain(self, other):
         # BEGIN Problem 9
-        "*** YOUR CODE HERE ***"
+        if self.contained_ant or other.is_container:
+            return False
+        return True
         # END Problem 9
 
     def contain_ant(self, ant):
         # BEGIN Problem 9
-        "*** YOUR CODE HERE ***"
+        self.contained_ant = ant
         # END Problem 9
 
     def action(self, colony):
         # BEGIN Problem 9
-        "*** YOUR CODE HERE ***"
+        if self.contained_ant:
+            self.contained_ant.action(colony)
         # END Problem 9
 
 class TankAnt(BodyguardAnt):
@@ -399,14 +423,18 @@ class TankAnt(BodyguardAnt):
 
     name = 'Tank'
     damage = 1
+    food_cost = 6
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 10
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem 10
 
     def action(self, colony):
         # BEGIN Problem 10
-        "*** YOUR CODE HERE ***"
+        bees = self.place.bees[:]
+        for bee in bees:
+            bee.reduce_armor(self.damage)
+        BodyguardAnt.action(self, colony)
         # END Problem 10
 
 class Water(Place):
@@ -416,19 +444,35 @@ class Water(Place):
         """Add an Insect to this place. If the insect is not watersafe, reduce
         its armor to 0."""
         # BEGIN Problem 11
-        "*** YOUR CODE HERE ***"
+        Place.add_insect(self, insect)
+        if insect.is_watersafe is False:
+            insect.reduce_armor(insect.armor)
         # END Problem 11
 
 # BEGIN Problem 12
 # The ScubaThrower class
+class ScubaThrower(ThrowerAnt):
+    """ScubaThrower is watersafe, opposite to ThrowerAnt"""
+
+    name = 'Scuba'
+    food_cost = 6
+    is_watersafe = True
+    implemented = True
+
+    def __init__(self, armor=1):
+        ThrowerAnt.__init__(self, armor)
+
 # END Problem 12
 
 # BEGIN Problem 13
-class QueenAnt(Ant):  # You should change this line
+class QueenAnt(ScubaThrower):  # You should change this line
 # END Problem 13
     """The Queen of the colony. The game is over if a bee enters her place."""
 
     name = 'Queen'
+    food_cost = 7
+    is_watersafe = True
+    has_queen = False
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 13
     implemented = False   # Change to True to view in the GUI
@@ -436,7 +480,12 @@ class QueenAnt(Ant):  # You should change this line
 
     def __init__(self, armor=1):
         # BEGIN Problem 13
-        "*** YOUR CODE HERE ***"
+        ScubaThrower.__init__(self, armor)
+        if QueenAnt.has_queen:
+            self.is_impostor = True
+        else:
+            QueenAnt.has_queen = True
+            self.is_impostor = False
         # END Problem 13
 
     def action(self, colony):
@@ -446,15 +495,34 @@ class QueenAnt(Ant):  # You should change this line
         Impostor queens do only one thing: reduce their own armor to 0.
         """
         # BEGIN Problem 13
-        "*** YOUR CODE HERE ***"
+        if self.is_impostor:
+            self.reduce_armor(self.armor)
+            return
+        place = self.place.exit
+        while place is not None:
+            self.double_damage(place.ant)
+            place = place.exit
+        ScubaThrower.action(self, colony)
         # END Problem 13
+
+    def double_damage(self, ant):
+        if ant is None:
+            return
+        elif hasattr(ant, 'contained_ant'):
+            self.double_damage(ant.contained_ant)
+        if ant.doubled is False:
+            ant.doubled = True
+            ant.damage *= 2
 
     def reduce_armor(self, amount):
         """Reduce armor by AMOUNT, and if the True QueenAnt has no armor
         remaining, signal the end of the game.
         """
         # BEGIN Problem 13
-        "*** YOUR CODE HERE ***"
+        ScubaThrower.reduce_armor(self, amount)
+        if self.is_impostor is False:
+            if self.armor <= 0:
+                bees_win()
         # END Problem 13
 
 class AntRemover(Ant):
@@ -500,8 +568,9 @@ class SlowThrower(ThrowerAnt):
     """ThrowerAnt that causes Slow on Bees."""
 
     name = 'Slow'
+    food_cost = 4
     # BEGIN Problem EC
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem EC
 
     def throw_at(self, target):
@@ -513,13 +582,15 @@ class ScaryThrower(ThrowerAnt):
     """ThrowerAnt that intimidates Bees, making them back away instead of advancing."""
 
     name = 'Scary'
+    food_cost = 4
     # BEGIN Problem EC
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem EC
 
     def throw_at(self, target):
         # BEGIN Problem EC
-        "*** YOUR CODE HERE ***"
+        if target:
+            apply_effect(make_scare, target, 2)
         # END Problem EC
 
 class LaserAnt(ThrowerAnt):
