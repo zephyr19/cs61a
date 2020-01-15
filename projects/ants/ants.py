@@ -144,6 +144,11 @@ class Bee(Insect):
     is_watersafe = True
     # OVERRIDE CLASS ATTRIBUTES HERE
 
+    def __init__(self, armor, place=None):
+        """Create a Bee with an ARMOR amount and a starting PLACE."""
+        Insect.__init__(self, armor, place)
+        self.scared = False
+        self.backwards = False
 
     def sting(self, ant):
         """Attack an ANT, reducing its armor by 1."""
@@ -170,7 +175,11 @@ class Bee(Insect):
         destination = self.place.exit
         # Extra credit: Special handling for bee direction
         # BEGIN EC
-        "*** YOUR CODE HERE ***"
+        if self.backwards:
+            if self.place.entrance is colony.beehive:
+                destination = self.place
+            else:
+                destination = self.place.entrance
         # END EC
         if self.blocked():
             self.sting(self.place.ant)
@@ -545,7 +554,12 @@ def make_slow(action, bee):
     action -- An action method of some Bee
     """
     # BEGIN Problem EC
-    "*** YOUR CODE HERE ***"
+    def slow_action(self, colony):
+        if colony.time % 2:
+            bee.action = action
+        else:
+            bee.action = lambda self, colony: None
+    return slow_action
     # END Problem EC
 
 def make_scare(action, bee):
@@ -554,13 +568,21 @@ def make_scare(action, bee):
     action -- An action method of some Bee
     """
     # BEGIN Problem EC
-    "*** YOUR CODE HERE ***"
+    def scare_action(self, colony):
+        if bee.scared is False:
+            bee.scared = True
+            bee.backwards = True
+    return scare_action
     # END Problem EC
 
 def apply_effect(effect, bee, duration):
     """Apply a status effect to a BEE that lasts for DURATION turns."""
     # BEGIN Problem EC
-    "*** YOUR CODE HERE ***"
+    previous_action = bee.action
+    bee.action = effect(bee.action, bee)
+    "*** After DURATION turns, restored the previous action ***"
+    "*** Also consider the 'previous behavior' situation ***"
+    bee.action = previous_action
     # END Problem EC
 
 
@@ -582,7 +604,7 @@ class ScaryThrower(ThrowerAnt):
     """ThrowerAnt that intimidates Bees, making them back away instead of advancing."""
 
     name = 'Scary'
-    food_cost = 4
+    food_cost = 6
     # BEGIN Problem EC
     implemented = True   # Change to True to view in the GUI
     # END Problem EC
