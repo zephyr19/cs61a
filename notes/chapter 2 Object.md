@@ -100,7 +100,9 @@ A central concept in object abstraction is a **generic function**: **using inter
 
 - **Multiple Representations:** there might be more than one useful representation for a data object, and we might like to design systems that can deal with multiple representations. [example: complex numbers can be represented in rectangular form and polar form](http://composingprograms.com/pages/27-object-abstraction.html)
 
-- **Properties:** `@properties` decorator allows functions to be called without `()`.
+- **Properties:** `@properties` enable the method to be invoked without `()`.
+
+  ​						`@method_name.setter` enable the method change some value without `{}`
 
 - `isinstance(obj, class)`: returns True if `obj` has a type that is or inherits from the `class`
 
