@@ -72,12 +72,68 @@ A sequence is an ordered collection of values, which has a length and supports e
 
 ![nonlocal](nonlocal.png)
 
-- **Iterators:** 
-  - `iter()` and `next() `(when there is nothing in the iterator, call next() will raise a `StopIteration` exception)
-  - If a dictionary changes it's length, the old iterator will be invalid.
-  - **Lazy:** `map()`, `filter()`, `zip()`, `reversed()`
-- **Generators:** `yield`, `yield from`
 - **declarative programming:** [2.4.13 Propagating Constraints](http://composingprograms.com/pages/24-mutable-data.html#dictionaries)
+
+
+
+## Read 2.5 Object-Oriented Programming
+
+- `method` vs `functions`
+- `class attributes` vs `instance attributes`
+- wanna hide attributes? name this way: `_attrname`
+- **Attribute assignment:** `<expression>.<attribute> = 1` 
+  - If expression is a class, it will change the old value or create a new attribute
+  - If expression is a instance, it will change the old value or create a *new* attribute, even if exists same name class attribute.
+
+- Multiple Inheritance: when the reference is ambiguous, the priority will follow the order of  father class list, resolves names from left to right
+
+
+
+## Read 2.7 Object Abstraction
+
+A central concept in object abstraction is a **generic function**: **using interfaces**, **type dispatching**, **type coercion**
+
+- **operations:** 
+  - `repr()` will invokes method `__repr__`
+  - `str()` will invokes method `__str__`
+  - `__bool__`, `__len__`, `__getitem__`, `__call__`(the instance is callable), `__add__`, `__radd__`
+
+- **Multiple Representations:** there might be more than one useful representation for a data object, and we might like to design systems that can deal with multiple representations. [example: complex numbers can be represented in rectangular form and polar form](http://composingprograms.com/pages/27-object-abstraction.html)
+
+- **Properties:** `@properties` decorator allows functions to be called without `()`.
+
+- `isinstance(obj, class)`: returns True if `obj` has a type that is or inherits from the `class`
+
+- **Type dispatching:** 
+
+  ```python
+  class Number:
+      def __add__(self, other):
+          if self.type_tag == other.type_tag:
+              return self.add(other)
+          elif (self.type_tag, other.type_tag) in self.adders:
+              return self.cross_apply(other, self.adders)
+      def __mul__(self, other):
+          if self.type_tag == other.type_tag:
+              return self.mul(other)
+          elif (self.type_tag, other.type_tag) in self.multipliers:
+              return self.cross_apply(other, self.multipliers)
+      def cross_apply(self, other, cross_fns):
+          cross_fn = cross_fns[(self.type_tag, other.type_tag)]
+          return cross_fn(self, other)
+      adders = {("com", "rat"): add_complex_and_rational,
+                ("rat", "com"): add_rational_and_complex}
+      multipliers = {("com", "rat"): mul_complex_and_rational,
+                     ("rat", "com"): mul_rational_and_complex}
+  ```
+
+  
+
+## Read 2.9 Recursive Objects
+
+When an object of some class has an attribute value of that same class, it is a **recursive object**.
+
+
 
 
 
