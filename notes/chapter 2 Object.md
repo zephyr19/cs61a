@@ -131,9 +131,17 @@ A central concept in object abstraction is a **generic function**: **using inter
 
   
 
+## Read 2.8 Efficiency
+
+**time** and **space**
+
+Measuring Efficiency: Big O notation
+
+
+
 ## Read 2.9 Recursive Objects
 
-When an object of some class has an attribute value of that same class, it is a **recursive object**.
+When an object of some class has an attribute value of that same class, it is a **recursive object**. such as link list and tree.
 
 
 
