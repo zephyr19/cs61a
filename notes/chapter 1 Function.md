@@ -88,7 +88,7 @@ When writing Python programs, include **docstrings for all but the simplest** fu
 
 **The code is written only once, but often read many times.**
 
-```pyth
+```python
 def pressure(v, t, n):
     """Compute the pressure in pascals of an ideal gas.
 
@@ -110,7 +110,7 @@ The **following lines:** describe **arguments** and **clarify the behavior** of 
 
 ## Reading 1.5 Control
 
-```pyt
+```python
 """ if statement """
 if x < 0:  # Clause
 	return -x  # Clause
