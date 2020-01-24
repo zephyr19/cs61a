@@ -54,6 +54,11 @@ y
 
 'hi
 ; expect hi
+
+; test for Problem 8
+(begin 1 2 3)
+; expect 3
+
 ; END PROBLEM 0
 
 ;;; These are examples from several sections of "The Structure
@@ -103,7 +108,7 @@ y
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Move the following (exit) line down the file to run additional tests. ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(exit)
+
 
 
 ;;; 1.1.2
@@ -151,7 +156,7 @@ circumference
   (sum-of-squares (+ a 1) (* a 2)))
 (f 5)
 ; expect 136
-
+(exit)
 ;;; 1.1.6
 
 (define (abs x)
