@@ -10,7 +10,50 @@
 ;;; *** Add your own tests here! ***
 ;;; ********************************
 ; BEGIN PROBLEM 0
-'replace-this-line
+
+; test for Problem 6
+(define x 3)
+; expect x
+
+x
+; expect 3
+
+(define y x)
+; expect y
+
+y
+; expect 3
+
+(define x 2)
+; expect x
+
+x
+; expect 2
+
+(define y 4)
+; expect y
+
+y
+; expect 4
+
+x
+; expect 2
+
+(define y (+ x 3))
+; expect y
+
+y
+; expect 5
+
+; test for Problem 6
+(quote b)
+; expect b
+
+(quote (1 . 2))
+; expect (1 . 2)
+
+'hi
+; expect hi
 ; END PROBLEM 0
 
 ;;; These are examples from several sections of "The Structure
