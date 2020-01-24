@@ -272,13 +272,24 @@ def do_if_form(expressions, env):
 def do_and_form(expressions, env):
     """Evaluate a (short-circuited) and form."""
     # BEGIN PROBLEM 13
-    "*** YOUR CODE HERE ***"
+    val = True
+    while expressions is not nil:
+        val = scheme_eval(expressions.first, env)
+        if scheme_falsep(val):
+            return False
+        expressions = expressions.second
+    return val
     # END PROBLEM 13
 
 def do_or_form(expressions, env):
     """Evaluate a (short-circuited) or form."""
     # BEGIN PROBLEM 13
-    "*** YOUR CODE HERE ***"
+    while expressions is not nil:
+        val = scheme_eval(expressions.first, env)
+        if scheme_truep(val):
+            return val
+        expressions = expressions.second
+    return False
     # END PROBLEM 13
 
 def do_cond_form(expressions, env):
@@ -294,7 +305,9 @@ def do_cond_form(expressions, env):
             test = scheme_eval(clause.first, env)
         if scheme_truep(test):
             # BEGIN PROBLEM 14
-            "*** YOUR CODE HERE ***"
+            if clause.second is nil:
+                return test
+            return eval_all(clause.second, env)
             # END PROBLEM 14
         expressions = expressions.second
 
@@ -312,7 +325,15 @@ def make_let_frame(bindings, env):
     if not scheme_listp(bindings):
         raise SchemeError('bad bindings list in let form')
     # BEGIN PROBLEM 15
-    "*** YOUR CODE HERE ***"
+    formals, vals = nil, nil
+    while bindings is not nil:
+        binding = bindings.first
+        check_form(binding, 2, 2)
+        formals = Pair(binding.first, formals)
+        vals = Pair(scheme_eval(binding.second.first, env), vals)
+        bindings = bindings.second
+    check_formals(formals)
+    return env.make_child_frame(formals, vals)
     # END PROBLEM 15
 
 def do_define_macro(expressions, env):
@@ -393,14 +414,15 @@ class MuProcedure(Procedure):
                     ||     ||
     """
 
-    def __init__(self, formals, body):
+    def __init__(self, formals, body, env):
         """A procedure with formal parameter list FORMALS (a Scheme list) and
         Scheme list BODY as its definition."""
         self.formals = formals
         self.body = body
 
     # BEGIN PROBLEM 16
-    "*** YOUR CODE HERE ***"
+    def make_call_frame(self, args, env):
+        return env.make_child_frame(self.formals, args)
     # END PROBLEM 16
 
     def __str__(self):
@@ -416,7 +438,7 @@ def do_mu_form(expressions, env):
     formals = expressions.first
     check_formals(formals)
     # BEGIN PROBLEM 16
-    "*** YOUR CODE HERE ***"
+    return MuProcedure(formals, expressions.second, env)
     # END PROBLEM 16
 
 SPECIAL_FORMS['mu'] = do_mu_form
