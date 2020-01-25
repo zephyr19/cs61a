@@ -7,11 +7,9 @@ test = {
         {
           'code': r"""
           scm> (let-to-lambda 1)
-          eb892a26497f936d1f6cae54aacc5f51
-          # locked
+          1
           scm> (let-to-lambda 'a)
-          1bafa4c4e8a0f079ce3e2b9f42f660e8
-          # locked
+          a
           scm> (let-to-lambda '(+ 1 2))
           60bce2a18c88a72aea48f8aa277c4f35
           # locked
