@@ -10,3 +10,11 @@ Some remained part II contents: Lab08 and HW05 in fa19 will be replaced by Lab08
 
 Start Part III with sp18: **Scheme**
 
+
+
+
+
+Well, later on, I discover the website had been restored!
+
+So I change to learn fa19 content on **Streams**
+
