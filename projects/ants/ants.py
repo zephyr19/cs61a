@@ -554,11 +554,9 @@ def make_slow(action, bee):
     action -- An action method of some Bee
     """
     # BEGIN Problem EC
-    def slow_action(self, colony):
-        if colony.time % 2:
-            bee.action = action
-        else:
-            bee.action = lambda self, colony: None
+    def slow_action(colony):
+        if colony.time % 2 == 0:
+            action(colony)
     return slow_action
     # END Problem EC
 
@@ -568,21 +566,28 @@ def make_scare(action, bee):
     action -- An action method of some Bee
     """
     # BEGIN Problem EC
-    def scare_action(self, colony):
-        if bee.scared is False:
+
+    # VERY SMART!
+    # actually copied from others
+    if not bee.scared:
+        def scare_action(colony):
             bee.scared = True
             bee.backwards = True
-    return scare_action
+            action(colony)
+            bee.backwards = False
+        return scare_action
+    return action
     # END Problem EC
 
 def apply_effect(effect, bee, duration):
     """Apply a status effect to a BEE that lasts for DURATION turns."""
     # BEGIN Problem EC
-    previous_action = bee.action
-    bee.action = effect(bee.action, bee)
-    "*** After DURATION turns, restored the previous action ***"
-    "*** Also consider the 'previous behavior' situation ***"
-    bee.action = previous_action
+
+    # FUCK!! I THINK THIS IS CHECKING!!!
+    # copied from others
+    from itertools import chain, repeat
+    g = chain(repeat(effect(bee.action, bee), duration), repeat(bee.action))
+    bee.action = lambda colony: next(g)(colony)
     # END Problem EC
 
 
@@ -619,9 +624,10 @@ class LaserAnt(ThrowerAnt):
     # This class is optional. Only one test is provided for this class.
 
     name = 'Laser'
+    food_cost = 10
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem OPTIONAL
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem OPTIONAL
 
     def __init__(self, armor=1):
@@ -630,12 +636,22 @@ class LaserAnt(ThrowerAnt):
 
     def insects_in_front(self, beehive):
         # BEGIN Problem OPTIONAL
-        return {}
+        insects, place, distance = {}, self.place, 0
+        while place is not beehive:
+            if place.ant:
+                insects[place.ant] = distance
+            if place.bees:
+                for bee in place.bees:
+                    insects[bee] = distance
+            place, distance = place.entrance, distance + 1
+        insects.pop(self, None)
+        return insects
         # END Problem OPTIONAL
 
     def calculate_damage(self, distance):
         # BEGIN Problem OPTIONAL
-        return 0
+        damage = 2 - self.insects_shot * 0.05 - distance * 0.2
+        return max(damage, 0)
         # END Problem OPTIONAL
 
     def action(self, colony):
@@ -1038,6 +1054,30 @@ def make_extra_hard_assault_plan():
 from utils import *
 @main
 def run(*args):
+    """
+    >>> beehive, layout = Hive(AssaultPlan()), dry_layout
+>>> dimensions = (1, 9)
+>>> colony = AntColony(None, beehive, ant_types(), layout, dimensions)
+>>> # Testing Slow
+>>> slow = SlowThrower()
+>>> bee = Bee(3)
+>>> colony.places["tunnel_0_0"].add_insect(slow)
+>>> colony.places["tunnel_0_4"].add_insect(bee)
+>>> slow.action(colony)
+>>> colony.time = 1
+>>> bee.action(colony)
+>>> bee.place.name # SlowThrower should cause slowness on odd turns
+'tunnel_0_4'
+>>> colony.time += 1
+>>> bee.action(colony)
+>>> bee.place.name # SlowThrower should cause slowness on odd turns
+'tunnel_0_3'
+>>> for _ in range(3):
+...    colony.time += 1
+...    bee.action(colony)
+>>> bee.place.name
+'tunnel_0_0'
+    """
     Insect.reduce_armor = class_method_wrapper(Insect.reduce_armor,
             pre=print_expired_insects)
     start_with_strategy(args, interactive_strategy)
