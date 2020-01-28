@@ -312,8 +312,6 @@ return ways(0)
 
 
 
-**Remain unsolved question:** [Anonymous factorial](https://cs61a.org/hw/hw03/#q3) and [Ping-pong](https://cs61a.org/hw/hw03/#q3) implementation is not perfect.
-
 
 
 

@@ -1,2 +1,3 @@
 (define quine
-    'your-code-here)
+	;copy from Internet
+    ((lambda (x) (list x (list (quote quote) x))) (quote (lambda (x) (list x (list (quote quote) x))))))
