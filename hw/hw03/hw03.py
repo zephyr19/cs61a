@@ -32,20 +32,6 @@ def num_sevens(n):
     else:
         return num_sevens(n // 10)
 
-def track_pingpong_value():
-    pingpong_value, is_add = 0, True
-
-    def update_pingpong_value(k):
-        nonlocal is_add, pingpong_value
-        if is_add:
-            pingpong_value += 1
-        else:
-            pingpong_value -= 1
-        if k % 7 == 0 or num_sevens(k):
-            is_add = not is_add
-        return pingpong_value
-    return update_pingpong_value
-
 def pingpong(n):
     """Return the nth element of the ping-pong sequence.
 
@@ -78,12 +64,14 @@ def pingpong(n):
     >>> check(HW_SOURCE_FILE, 'pingpong', ['Assign', 'AugAssign'])
     True
     """
-    def pingpong_recursive(f, k):
+    def helper(k, direction, result):
         if k == n:
-            return f(k)
-        f(k)
-        return pingpong_recursive(f, k+1)
-    return pingpong_recursive(track_pingpong_value(), 1)
+            return result + direction
+        elif k % 7 == 0 or num_sevens(k):
+            return helper(k+1, -direction, result+direction)
+        else:
+            return helper(k+1, direction, result+direction)
+    return helper(1, 1, 0)
 
 def count_change(amount):
     """Return the number of ways to make change for amount.
@@ -194,4 +182,6 @@ def make_anonymous_factorial():
     >>> check(HW_SOURCE_FILE, 'make_anonymous_factorial', ['Assign', 'AugAssign', 'FunctionDef', 'Recursion'])
     True
     """
-    return
+    # return lambda n: (lambda f, v: f(f, v))(lambda f, v: 1 if v == 1 else mul(v, f(f, sub(v, 1))), n)
+
+    return lambda n: (lambda f, v: f(f, v))(lambda g, w: 1 if w == 1 else mul(w, g(g, sub(w, 1))), n)
